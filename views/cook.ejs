@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cook</title>
+    <link rel="stylesheet" type="text/css"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #A78F89;
+            padding: 20px;
+        }
+
+        .navbar {
+            background-color: #ffb300;
+            color: #fff;
+        }
+
+        .card-header {
+            background-color: #ffb300;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        }
+        .card {
+            background-color: #fff;
+            border: 1px solid #ffb300;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+            text-align: left;
+        }
+
+        th {
+            background-color: rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        }
+
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css" />
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+    <script>
+        function deleteProduct(productId) {
+            // Send request to delete product with productId
+
+            $.ajax({
+                // call api
+                // api ลบ
+                // อัพเดตdatatable
+                url: '/cook/' + productId,
+                type: 'DELETE',
+                success: () => {
+                    // Reload the table or update UI as needed
+                    console.log("success");
+                    // $('#order_sushiTable').DataTable().ajax.reload();
+                    window.location.reload();
+                },
+                error: function (error) {
+                    // Handle error
+                    console.error('Error deleting product:', error);
+                }
+            });
+        }
+    </script>
+    
+</head>
+
+<body>
+    <header class="header">
+        <div class="text_h">
+            <h1 class="display-4 fw-bolder">Cook Order</h1>
+        </div>
+    </header>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>โต๊ะ</th>
+                <th>ประเภท</th>
+                <th>เครื่องเคียง</th>
+                <th>ซอส</th>
+                <th>หน้า</th>
+                <th>จำนวน</th>
+                <th>Action</th>
+            </tr>
+            <% cookre.forEach(product=>{
+                %>
+                <tr>
+
+                    <th>
+                        <%=product.table_number%>
+                    </th>
+                    <th>
+                        <%=product.type%>
+                    </th>
+                    <th>
+                        <%=product.sid_name%>
+                    </th>
+                    <th>
+                        <%=product.sauce_name%>
+                    </th>
+                    <th>
+                        <%=product.ot_name%>
+                    </th>
+                    <th>
+                        <%=product.amount%>
+                    </th>
+                    <th><button onclick="deleteProduct('<%=product.order_id%>')">Delete</button></th>
+
+                </tr>
+                <% }); %>
+        </thead>
+
+    </table>
+</body>
+
+</html>

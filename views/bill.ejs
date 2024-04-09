@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bill</title>
+    <link rel="stylesheet" type="text/css"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.125);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+            text-align: center;
+
+        }
+
+        th {
+            background-color: rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        }
+
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css" />
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+    <script>
+        function selectTable(tableId) {
+            // Send request to delete product with productId
+
+            $.ajax({
+                // call api
+                // api ลบ
+                // อัพเดตdatatable
+
+                url: '/bill/' + tableId,
+                type: 'get',
+                success: function (data) {
+                    // Reload the table or update UI as needed
+
+                    console.log("success");
+
+                    location.href = "/bill/" + tableId;
+                },
+                error: function (error) {
+                    // Handle error
+                    console.error('Error deleting product:', error);
+                }
+            });
+        }
+        function deleteProduct(productId) {
+            // Send request to delete product with productId
+            $.ajax({
+                url: '/bill/delete/' + productId,
+                type: 'DELETE',
+                success: function (result) {
+                    // Reload the table or update UI as needed
+                    window.location.reload();
+
+                },
+                error: function (error) {
+                    // Handle error
+                    console.error('Error deleting product:', error);
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Bill</h1>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+
+            </tr>
+            <tr>
+
+                <th>โต๊ะ</th>
+                <th>ประเภท</th>
+                <th>เครื่องเคียง</th>
+                <th>ซอส</th>
+                <th>หน้า</th>
+                <th>จำนวน</th>
+                <th>ราคา</th>
+            </tr>
+            <% let tablenum=0 ; let grandTotal=0 ; bill.forEach(product=>{
+
+                %>
+                <tr>
+
+                    <th>
+                        <%=product.table_number%>
+                    </th>
+                    <th>
+                        <%=product.type%>
+                    </th>
+                    <th>
+                        <%=product.sid_name%>
+                    </th>
+                    <th>
+                        <%=product.sauce_name%>
+                    </th>
+                    <th>
+                        <%=product.ot_name%>
+                    </th>
+                    <th>
+                        <%=product.amount%>
+                    </th>
+                    <th>
+                        <%=product.price%>
+                    </th>
+                    <% tablenum=product.table_number; grandTotal +=(+product.price * +product.amount); %>
+                </tr>
+                <% }); %>
+        </thead>
+       
+    </table>
+    <table>
+        <tr>
+            <td><button onclick="selectTable('1')">โต๊ะ1</button></td>
+            <td><button onclick="selectTable('2')">โต๊ะ2</button></td>
+            <td><button onclick="selectTable('3')">โต๊ะ3</button></td>
+            <td><button onclick="selectTable('4')">โต๊ะ4</button></td>
+            <td><button onclick="selectTable('5')">โต๊ะ5</button></td>
+            <td colspan="4" style="text-align: right;"><strong>Grand Total:</strong></td>
+
+            <td><strong>
+                    <%= grandTotal %>
+                </strong></td>
+            <td><strong><button onclick="deleteProduct('<%= tablenum %>')">รายการเสร็จสิ้น</button></strong></td>
+        </tr>
+    </table>
+</body>
+
+</html>
